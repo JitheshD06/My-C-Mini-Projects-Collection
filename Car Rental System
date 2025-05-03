@@ -1,0 +1,168 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_CARS 100
+#define FILENAME "cars.txt"
+
+struct Car {
+    int carID;
+    char carName[50];
+    int rentPricePerDay;
+    int available;
+};
+
+void displayMenu() {
+    printf("\nCar Rental System\n");
+    printf("1. Add Car\n");
+    printf("2. View Cars\n");
+    printf("3. Rent a Car\n");
+    printf("4. Return a Car\n");
+    printf("5. Exit\n");
+    printf("Enter your choice: ");
+}
+
+void addCar() {
+    FILE *file = fopen(FILENAME, "a");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    struct Car newCar;
+    printf("Enter Car ID: ");
+    scanf("%d", &newCar.carID);
+    getchar(); 
+    printf("Enter Car Name: ");
+    fgets(newCar.carName, 50, stdin);
+    newCar.carName[strcspn(newCar.carName, "\n")] = 0; 
+    printf("Enter Rent Price Per Day: ");
+    scanf("%d", &newCar.rentPricePerDay);
+    newCar.available = 1; 
+
+    fwrite(&newCar, sizeof(struct Car), 1, file);
+    fclose(file);
+    printf("Car added successfully!\n");
+}
+
+
+void viewCars() {
+    FILE *file = fopen(FILENAME, "r");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    struct Car car;
+    int found = 0;
+    printf("\nAvailable Cars:\n");
+    printf("ID\tName\t\tPrice/Day\tAvailable\n");
+
+    while (fread(&car, sizeof(struct Car), 1, file)) {
+        if (car.available) {
+            printf("%d\t%s\t%d\t\t%s\n", car.carID, car.carName, car.rentPricePerDay, (car.available ? "Yes" : "No"));
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("No cars available.\n");
+    }
+
+    fclose(file);
+}
+
+
+void rentCar() {
+    int carID;
+    printf("Enter Car ID to rent: ");
+    scanf("%d", &carID);
+
+    FILE *file = fopen(FILENAME, "r+");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    struct Car car;
+    int found = 0;
+    while (fread(&car, sizeof(struct Car), 1, file)) {
+        if (car.carID == carID && car.available) {
+            car.available = 0; // Mark car as rented
+            fseek(file, -sizeof(struct Car), SEEK_CUR);
+            fwrite(&car, sizeof(struct Car), 1, file); 
+            printf("Car rented successfully!\n");
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Car not found or already rented!\n");
+    }
+
+    fclose(file);
+}
+
+
+void returnCar() {
+    int carID;
+    printf("Enter Car ID to return: ");
+    scanf("%d", &carID);
+
+    FILE *file = fopen(FILENAME, "r+");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    struct Car car;
+    int found = 0;
+    while (fread(&car, sizeof(struct Car), 1, file)) {
+        if (car.carID == carID && !car.available) {
+            car.available = 1; 
+            fseek(file, -sizeof(struct Car), SEEK_CUR); 
+            fwrite(&car, sizeof(struct Car), 1, file); // Update the car record
+            printf("Car returned successfully!\n");
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Car not found or not rented!\n");
+    }
+
+    fclose(file);
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        displayMenu();
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addCar();
+                break;
+            case 2:
+                viewCars();
+                break;
+            case 3:
+                rentCar();
+                break;
+            case 4:
+                returnCar();
+                break;
+            case 5:
+                printf("Exiting system...\n");
+                return 0;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
