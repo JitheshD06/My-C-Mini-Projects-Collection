@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_USERS 10
+#define LENGTH 30
+
+
+typedef struct {
+    char username[LENGTH];
+    char password[LENGTH];
+} User;
+
+int no_of_users = 0;
+User users[MAX_USERS];
+
+void register_user();
+void login_user();
+int fgets_solution(char *string);
+
+int main() {
+    int operation;
+    
+  
+    do {
+        printf("***WELCOME TO USER MANAGEMENT ***\n");
+        printf("\n1. REGISTRATION\n");
+        printf("2. LOGIN\n");
+        printf("3. EXIT\n");
+        printf("Select the Option you Want to Access : ");
+        scanf("%d", &operation);
+        getchar(); 
+        
+        if (operation == 3 || operation > 3) {
+            printf("Exiting The User Management\n");
+            break;
+        }
+
+       
+        switch (operation) {
+            case 1:
+                register_user();
+                break;
+            case 2:
+                login_user();
+                break;
+            default:
+                printf("Invalid option, please try again.\n");
+        }
+    } while (operation != 3);
+
+    return 0;
+}
+
+void register_user() {
+    if (no_of_users == MAX_USERS) {
+        printf("Number of users exceeded %d. Cannot register more users.\n", MAX_USERS);
+        return;
+    }
+
+   
+    User user;
+
+    printf("Enter the Username: ");
+    fgets(user.username, LENGTH, stdin);
+    fgets_solution(user.username);
+
+    printf("Enter the Password: ");
+    fgets(user.password, LENGTH, stdin);
+    fgets_solution(user.password);
+
+    users[no_of_users] = user;
+    no_of_users++;
+
+    printf("User registered successfully!\n");
+}
+
+void login_user() {
+    char username[LENGTH];
+    char password[LENGTH];
+
+    printf("Enter the Username: ");
+    fgets(username, LENGTH, stdin);
+    fgets_solution(username);
+
+    printf("Enter the Password: ");
+    fgets(password, LENGTH, stdin);
+    fgets_solution(password);
+
+    for (int i = 0; i < no_of_users; i++) {
+        if (strcmp(username, users[i].username) == 0 && strcmp(password, users[i].password) == 0) {
+            printf("Login successful!\n");
+            return;
+        }
+    }
+
+    printf("Invalid username or password. Please try again.\n");
+}
+
+
+int fgets_solution(char *string) {
+    int index = strcspn(string, "\n");
+    if (index < strlen(string)) {
+        string[index] = '\0';
+    }
+    return 0;
+}
