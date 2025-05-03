@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <math.h>
+void menu_driven();
+void division(float fn,float sn);
+void modulus(int fn,int sn);
+void power(int fn,int sn);
+int main() {
+    int choice,first_number,second_number;
+       while(choice != 7 ){
+            menu_driven();
+            printf("Enter the your choice: ");
+            scanf("%d",&choice);
+//           if(choice == 6){
+//              printf("Exiting The Calculator");
+// }
+//           if(choice >6){
+//              printf("invalid choice");
+//              break;
+// }
+if(choice <7){
+printf("enter the first number :\n");
+scanf("%d",&first_number);
+printf("enter the second number:\n");
+scanf("%d",&second_number);
+}
+  switch(choice){
+      case 1:
+      printf("%d + %d = %d\n",first_number,second_number,first_number + second_number);
+      break;
+      case 2:
+      printf("%d - %d = %d\n",first_number,second_number,first_number - second_number);
+      break;
+      case 3:
+      printf("%d * %d = %d\n",first_number,second_number,first_number * second_number);
+      break;
+      case 4:
+       division(first_number,second_number);
+      break;
+      case 5:
+       modulus(first_number,second_number);
+      break;
+      case 6 :
+       power(first_number,second_number);
+       break;
+    
+      default:
+              if(choice == 7){
+             printf("Exiting The Calculator");
+             
+              }
+              if(choice >7){
+             printf("invalid choice. Try according to menu\n");
+             break;
+            
+             }
+      
+  }
+  }
+  
+    return 0;
+}
+void menu_driven(){
+       printf("***************************\n");
+       printf("Enter 1 for addition\n");
+       printf("Enter 2 for subtraction\n"); 
+       printf("Enter 3 for multiplication\n");
+       printf("Enter 4 for division\n");
+       printf("Enter 5 for modulus\n");
+       printf("Enter 6 for power of number\n");
+       printf("Enter 7 for exit\n");
+        printf("**************************\n");
+}
+void division(float fn,float sn){
+    if(sn == 0){
+        fprintf(stderr,"invalid as P/q where q!=0\n");
+    }else{
+        printf("%f / %f = %f\n",fn,sn,fn/sn);
+    }
+}
+void modulus(int fn,int sn){
+    if(sn == 0){
+        fprintf(stderr,"invalid as P/q where q!=0\n");
+    }else{
+        printf("%d %% %d =%d \n",fn,sn,fn % sn);
+    }
+}
+void power(int fn,int sn){
+    if(sn == 0){
+        printf("%d ^ %d = 1\n",fn,sn);
+    }else if(sn != 0 && fn != 0){
+        printf("%d ^ %d =%d \n",fn,sn,pow(fn,sn));
+    }
+}
