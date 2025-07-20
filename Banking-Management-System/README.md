@@ -1,1 +1,18 @@
+# 🏦 Banking Management System
 
+A simple file-based banking system built in C that allows users to create accounts, deposit and withdraw money, and check their account balances. This project uses basic file handling (`account.dat`) to store persistent data.
+
+## 📌 Features
+
+- ✅ Create a new bank account
+- 💰 Deposit money into an account
+- 💸 Withdraw money with balance check
+- 📊 Check account balance
+- 📂 Data is stored in a binary file using `fwrite` and `fread`
+
+## 🛠️ Technologies Used
+
+- Programming Language: C
+- File Handling: `fopen`, `fread`, `fwrite`, `fseek`
+- Data Structure: `struct` for Account details
+- Standard I/O and CLI-based interaction
